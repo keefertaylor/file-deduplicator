@@ -1,4 +1,5 @@
 const fs = require('fs')
+const deduplicator = require('./deduplicator.js')
 
 const fileSizeDeduplicator = {
     /**
@@ -8,35 +9,7 @@ const fileSizeDeduplicator = {
      * @returns {Array<Array<String>>} A list of lists of potentially deduplicated files. Returns undefined if there was an error.
      */
     deduplicateByFileSize: function(filenames) {
-        var fileSizeMap = {} //new Map()
-
-        for (var i = 0; i < filenames.length; i++) {
-            let filename = filenames[i];
-            let size = this.fileSizeInBytes(filename)
-
-            // If the file couldn't be found, then bail out of the entire function since something has gone terribly wrong.
-            if (size == undefined) {
-                return undefined;
-            }
-
-            // Add the file to the list in the map.
-            if (fileSizeMap[size] == undefined) {
-                fileSizeMap[size] = [filename]
-            } else {
-                fileSizeMap[size].push(filename)
-            }
-        }
-
-        // Iterate over the list of files.
-        var potentiallyDuplicatedFiles = []
-        for (fileSize in fileSizeMap) {
-            let fileList = fileSizeMap[fileSize]
-            if (fileList.length != 1) {
-                potentiallyDuplicatedFiles.push(fileList)
-            }
-        }
-
-        return potentiallyDuplicatedFiles;
+        return deduplicator.deduplicate(filenames, this.fileSizeInBytes)
     },
 
     /**
