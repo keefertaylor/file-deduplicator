@@ -1,31 +1,29 @@
-const fs = require('fs')
+const fs = require('md5-file')
 const deduplicator = require('./deduplicator.js')
 
-const fileSizeDeduplicator = {
+const md5Deduplicator = {
     /**
-     * Deduplicate the given files by file size.
+     * Deduplicate the given files by md5 hash.
      * 
      * @param {Array<String>} filenames: A list of filenames to examine.
      * @returns {Array<Array<String>>} A list of lists of potentially deduplicated files. Returns undefined if there was an error.
      */
     deduplicate: function(filenames) {
-        return deduplicator.deduplicate(filenames, this.fileSizeInBytes)
+        return deduplicator.deduplicate(filenames, this.md5Hash)
     },
 
     /**
-     * Return the given size of the file in bytes.
+     * Return the md5 checksum of the given file.
      * 
      * @param {String} filename
      */
-    fileSizeInBytes: function(filename) {
+    md5Hash: function(filename) {
         try {
-            const stats = fs.statSync(filename);
-            const fileSizeInBytes = stats.size;
-            return fileSizeInBytes;
+            return md5File.sync(filename)
         } catch (e) {
             return undefined;
         }
     }
 };
 
-module.exports = fileSizeDeduplicator
+module.exports = md5Deduplicator
