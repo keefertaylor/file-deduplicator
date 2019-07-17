@@ -1,0 +1,23 @@
+{
+  "name": "file-deduplicator",
+  "version": "1.0.0",
+  "description": "Deduplicates files across directories.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/keefertaylor/file-deduplicator.git"
+  },
+  "keywords": [
+    "file",
+    "deduplication"
+  ],
+  "author": "Keefer Taylor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/keefertaylor/file-deduplicator/issues"
+  },
+  "homepage": "https://github.com/keefertaylor/file-deduplicator#readme"
+}
