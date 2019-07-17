@@ -80,8 +80,8 @@ describe('#deduplicateByFileSize', function() {
         let potentialDuplicates = fileSizeDeduplicator.deduplicateByFileSize(filenames)
 
         // THEN the sets of overlapping files are identified.
-        assert.equal(potentialDuplicates.length, 1)
-        assert.equal(potentialDuplicates[0].length, 2)
+        assert.equal(potentialDuplicates.length, 2)
         assert.equal(potentialDuplicates[0].length, 3)
+        assert.equal(potentialDuplicates[1].length, 2)
     });
 })
