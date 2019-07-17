@@ -1,9 +1,5 @@
 const fs = require('fs')
 
-// Test cases:
-// - two same sized files
-// - two different sized files
-
 const fileSizeDeduplicator = {
     /**
      * Deduplicate the given files by file size.

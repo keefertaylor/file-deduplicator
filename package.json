@@ -11,7 +11,7 @@
     "url": "git+ssh://git@github.com/keefertaylor/file-deduplicator.git"
   },
   "keywords": [
-    "file", 
+    "file",
     "deduplication"
   ],
   "author": "Keefer Taylor",

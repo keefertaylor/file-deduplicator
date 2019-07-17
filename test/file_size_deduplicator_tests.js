@@ -1,17 +1,23 @@
 var assert = require('assert');
 var fileSizeDeduplicator = require('../file_size_deduplicator.js')
 
-let test_data_dir = process.cwd() + '/test_data/'
+let testDataDir = process.cwd() + '/test_data/'
 
-let testFile = test_data_dir + 'test_file.txt'
+let testFile = testDataDir + 'test_file.txt'
 let testFileSize = 10 // bytes
 
 let duplicatedFiles = [
-    test_data_dir + 'test_duplicated_file_1.txt',
-    test_data_dir + 'test_duplicated_file_2.txt'
+    testDataDir + 'test_duplicated_file_1.txt',
+    testDataDir + 'test_duplicated_file_2.txt'
 ]
 
-let invalidFile = test_data_dir + 'DOES_NOT_EXIST.txt'
+let sameSizedFiles = [
+    testDataDir + "test_file_with_same_size_different_content_1.txt",
+    testDataDir + "test_file_with_same_size_different_content_2.txt",
+    testDataDir + "test_file_with_same_size_different_content_3.txt"
+]
+
+let invalidFile = testDataDir + 'DOES_NOT_EXIST.txt'
 
 describe('#fileSizeInBytes', function() {
     it('should return the file size in bytes for a file', function() {
@@ -45,7 +51,37 @@ describe('#deduplicateByFileSize', function() {
         // WHEN the files are deduplicated.
         let potentialDuplicates = fileSizeDeduplicator.deduplicateByFileSize(filenames);
 
-        // THEN the result is undefined.
+        // THEN the result is the empty list.
         assert.equal(potentialDuplicates.length, 0);
+    });
+
+    it('should return a single list when there are two duplicated files', function() {
+        // GIVEN a list of files that have 2 duplicates.
+        let filenames = duplicatedFiles.slice()
+        filenames.push(testFile);
+
+        // WHEN the files are deduplicated.
+        let potentialDuplicates = fileSizeDeduplicator.deduplicateByFileSize(filenames)
+
+        // THEN the result is a single list with the duplicated files.
+        assert.equal(potentialDuplicates.length, 1)
+        assert.equal(potentialDuplicates[0].length, 2)
+        assert.equal(potentialDuplicates[0][0], duplicatedFiles[0])
+        assert.equal(potentialDuplicates[0][1], duplicatedFiles[1])
+    });
+
+    it('should return two lists when there are two sets of duplicated files', function() {
+        // GIVEN a list of files that have 2 duplicated sets of files.
+        let filenames = duplicatedFiles.slice()
+        filenames = filenames.concat(sameSizedFiles);
+        filenames.push(testFile)
+
+        // WHEN the files are deduplicated.
+        let potentialDuplicates = fileSizeDeduplicator.deduplicateByFileSize(filenames)
+
+        // THEN the sets of overlapping files are identified.
+        assert.equal(potentialDuplicates.length, 1)
+        assert.equal(potentialDuplicates[0].length, 2)
+        assert.equal(potentialDuplicates[0].length, 3)
     });
 })
