@@ -1,0 +1,1 @@
+test_duplicated_file_1.txt and test_duplicated_file_2.txt have the exact same content
