@@ -4,7 +4,7 @@
   "description": "Deduplicates files across directories.",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/keefertaylor/file-deduplicator/issues"
   },
-  "homepage": "https://github.com/keefertaylor/file-deduplicator#readme"
+  "homepage": "https://github.com/keefertaylor/file-deduplicator#readme",
+  "dependencies": {
+    "mocha": "^6.1.4"
+  }
 }
