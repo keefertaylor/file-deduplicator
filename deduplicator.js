@@ -2,12 +2,43 @@ const deduplicator = {
     /**
      * Deduplicate the given files using an evaluator function.
      * 
-     * @param {*} filenames The files to consider.
+     * @param {Array<String>>} filenames The files to consider.
      * @param {*} evaluatorFunction A function which produces an output for the given file.
      */
     deduplicate: function(filenames, evaluatorFunction) {
-        var evaluatedToFilesMap = {}
+        var evaluatedToFilesMap = this.evaluateInputs(filenames, evaluatorFunction);
+        if (evaluatedToFilesMap == undefined) {
+            return undefined
+        }
 
+        return this.reduceToPotentiallyDuplicatedFiles(evaluatedToFilesMap);
+    },
+
+    /**
+     * Remove any files from the map.
+     * @param {} filenames 
+     * @param {*} evaluatorFunction 
+     */
+    reduceToPotentiallyDuplicatedFiles: function(evaluatedToFilesMap) {
+        // Iterate over the list of files.
+        var potentiallyDuplicatedFiles = []
+        for (evaluated in evaluatedToFilesMap) {
+            let fileList = evaluatedToFilesMap[evaluated]
+            if (fileList.length != 1) {
+                potentiallyDuplicatedFiles.push(fileList)
+            }
+        }
+        return potentiallyDuplicatedFiles
+    },
+
+    /**
+     * Build a map of `evaluated` -> List of files.
+     * 
+     * @param {Array<String>} filenames 
+     * @param {Function} evaluatorFunction 
+     */
+    evaluateInputs: function(filenames, evaluatorFunction) {
+        var evaluatedToFilesMap = {}
         for (var i = 0; i < filenames.length; i++) {
             let filename = filenames[i];
             let evaluated = evaluatorFunction(filename)
@@ -24,17 +55,7 @@ const deduplicator = {
                 evaluatedToFilesMap[evaluated].push(filename)
             }
         }
-
-        // Iterate over the list of files.
-        var potentiallyDuplicatedFiles = []
-        for (evaluated in evaluatedToFilesMap) {
-            let fileList = evaluatedToFilesMap[evaluated]
-            if (fileList.length != 1) {
-                potentiallyDuplicatedFiles.push(fileList)
-            }
-        }
-
-        return potentiallyDuplicatedFiles;
+        return evaluatedToFilesMap
     }
 }
 
