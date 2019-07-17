@@ -15,7 +15,8 @@ const deduplicator = {
     },
 
     /**
-     * Remove any files from the map.
+     * Remove any non-duplicated files from the map.
+     *
      * @param {} filenames 
      * @param {*} evaluatorFunction 
      */
