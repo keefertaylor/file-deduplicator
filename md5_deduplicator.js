@@ -1,4 +1,4 @@
-const fs = require('md5-file')
+const hasher = require('md5-file')
 const deduplicator = require('./deduplicator.js')
 
 const md5Deduplicator = {
@@ -19,7 +19,7 @@ const md5Deduplicator = {
      */
     md5Hash: function(filename) {
         try {
-            return md5File.sync(filename)
+            return hasher.sync(filename)
         } catch (e) {
             return undefined;
         }
