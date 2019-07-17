@@ -30,21 +30,17 @@ const run = async function(dir1, dir2) {
         console.log(duplicates[i])
     }
 
-    promptAndCleanup(duplicates)
-}
-
-/**
- * @param {Array<Array<String>>} duplicatedFiles 
- */
-const promptAndCleanup = async function(duplicatedFiles) {
     const userWantsToCleanup = await prompt()
     if (!userWantsToCleanup) {
         console.log("Exiting.")
         process.abort()
     }
-
-    fileSystemCleanuper.cleanupFiles(duplicatedFiles, entityDeleter);
+    console.log("Cleaning up")
+    fileSystemCleanuper.cleanupFiles(duplicates, entityDeleter);
+    fileSystemCleanuper.cleanupEmptyFolders(dir1)
+    fileSystemCleanuper.cleanupEmptyFolders(dir2)
 }
+
 
 const prompt = function() {
     return new Promise(function(resolve) {
