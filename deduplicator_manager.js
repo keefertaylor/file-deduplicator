@@ -8,7 +8,15 @@ const DeduplicatorManager = {
      * @param {Array<File>} filenames 
      */
     deduplicate: function(filenames) {
-        return this.deduplicateWithDeduplicators([filenames], [ fileSizeDeduplicator, md5Deduplicator ])
+        let sanitizedFilenames = this.removeDuplicateFilenames(filenames)
+        return this.deduplicateWithDeduplicators([sanitizedFilenames], [ fileSizeDeduplicator, md5Deduplicator ])
+    },
+
+    /**
+     * Remove any duplicates from the array.
+     */
+    removeDuplicateFilenames: function(filenames) {
+        return [...new Set(filenames)];
     },
 
     /**

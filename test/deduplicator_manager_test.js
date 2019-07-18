@@ -56,4 +56,34 @@ describe('#deduplicate', function() {
         // THEN the result is empty.
         assert.equal(duplicates.length, 0)        
     })
+
+    it('should not try to dedupe the same file', function() {
+        // Given a list of with two of the same file.
+        let filenames = [ testData.testFile, testData.testFile ]
+        
+        // WHEN the files are deduplicated.
+        let duplicates = deduplicatorManager.deduplicate(filenames)
+
+        // THEN the result is empty.
+        assert.equal(duplicates.length, 0)
+    })
+
+    it('should still find duplicates when the same file id duplicated', function() {
+        // GIVEN a list of files with some duplicates and some files listed twice.
+        let filenames = testData.duplicatedFiles.slice()
+        filenames = filenames.concat(testData.duplicatedFiles);
+        filenames = filenames.concat(testData.sameSizedFiles);
+        filenames = filenames.concat(testData.sameSizedFiles);
+        filenames.push(testData.testFile)
+        filenames.push(testData.testFile)
+
+        // WHEN the files are deduplicated.
+        let duplicates = deduplicatorManager.deduplicate(filenames)
+        
+        // THEN the set of overlapping files are identified.
+        assert.equal(duplicates.length, 1)
+        assert.equal(duplicates[0].length, 2)
+        assert.equal(duplicates[0][0], testData.duplicatedFiles[0])
+        assert.equal(duplicates[0][1], testData.duplicatedFiles[1])
+    })
 });
