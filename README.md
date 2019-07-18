@@ -14,3 +14,8 @@ After a diff is printed, the program can optionally clean up files and folders f
 $ node index.js <absolute path to dir1> <absolute path to dir2>
 ```
 
+# Testing
+
+```
+$ npm test
+```
