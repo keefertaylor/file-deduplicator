@@ -1,6 +1,6 @@
 var assert = require('assert');
 var testData = require('./test_data.js')
-var deduplicatorManager = require('../deduplicator_manager.js')
+var deduplicatorManager = require('../src/deduplicator_manager.js')
 
 describe('#deduplicate', function() {
     it('should dedupe successfully', function() {

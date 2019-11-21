@@ -1,5 +1,5 @@
 var assert = require('assert');
-const argParser = require('../arg_parser.js')
+const argParser = require('../src/arg_parser.js')
 
 let defaultArgv = [
     '/usr/local/Cellar/node/12.3.1/bin/node',

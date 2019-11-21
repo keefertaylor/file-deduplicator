@@ -1,6 +1,6 @@
 var assert = require('assert');
 var testData = require('./test_data.js')
-const fileSystemUtils = require('../file_system_utils.js')
+const fileSystemUtils = require('../src/file_system_utils.js')
 
 describe('#allFilesRecursively', function() {
     it('should return all files', async function() {

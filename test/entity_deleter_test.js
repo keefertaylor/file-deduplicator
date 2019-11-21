@@ -1,5 +1,5 @@
 const assert = require('assert');
-const entityDeleter = require('../entity_deleter.js')
+const entityDeleter = require('../src/entity_deleter.js')
 const fs = require('fs')
 
 describe('#delete file', function() {

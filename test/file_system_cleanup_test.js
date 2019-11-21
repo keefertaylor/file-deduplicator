@@ -1,5 +1,5 @@
 const assert = require('assert');
-const fileSystemCleanuper = require('../file_system_cleanuper')
+const fileSystemCleanuper = require('../src/file_system_cleanuper')
 
 var deletedFiles = []
 

@@ -1,6 +1,6 @@
 var assert = require('assert');
 var testData = require('./test_data.js') 
-var md5Deduplicator = require('../md5_deduplicator.js')
+var md5Deduplicator = require('../src/md5_deduplicator.js')
 
 describe('#md5Hash', function() {
     it('should return the md5 hash for a file', function() {
