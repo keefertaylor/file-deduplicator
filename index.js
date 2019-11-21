@@ -18,13 +18,18 @@ const entityDeleter = require('./entity_deleter.js')
 const run = async function(dir1, dir2) {
     console.log("Deduping across: ")
     console.log("- " + dir1)
-    console.log("- " + dir2)
-
     const dir1FileList = await fileSystemUtils.allFilesRecursively(args[0])
-    const dir2FileList = await fileSystemUtils.allFilesRecursively(args[1])
+
+    var dir2FileList = [];
+    if (dir2 != undefined) {
+        console.log("- " + dir2)
+        dir2FileList = await fileSystemUtils.allFilesRecursively(args[1]);
+    }
+
     const filesToConsider = dir1FileList.concat(dir2FileList)
 
     let duplicates = deduplicationManager.deduplicate(filesToConsider)
+
     console.log("Here are the duplicated files")
     for (var i = 0; i < duplicates.length; i++) {
         console.log(duplicates[i])
@@ -37,8 +42,14 @@ const run = async function(dir1, dir2) {
     }
     console.log("Cleaning up")
     fileSystemCleanuper.cleanupFiles(duplicates, entityDeleter);
+
+    console.log("Cleaning up empty folders in " + dir1);
     fileSystemCleanuper.cleanupEmptyFolders(dir1)
+    
+    console.log("Cleaning up empty folders in " + dir2);
     fileSystemCleanuper.cleanupEmptyFolders(dir2)
+
+    console.log("done");
 }
 
 

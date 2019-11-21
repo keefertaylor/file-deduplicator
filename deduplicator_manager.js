@@ -1,5 +1,6 @@
 let md5Deduplicator = require('./md5_deduplicator.js')
 let fileSizeDeduplicator = require('./file_size_deduplicator.js')
+let nameDeduplicator = require('./name_deduplicator.js')
 
 const DeduplicatorManager = {
     /**
@@ -9,7 +10,8 @@ const DeduplicatorManager = {
      */
     deduplicate: function(filenames) {
         let sanitizedFilenames = this.removeDuplicateFilenames(filenames)
-        return this.deduplicateWithDeduplicators([sanitizedFilenames], [ fileSizeDeduplicator, md5Deduplicator ])
+        let deduplicators = [ nameDeduplicator, fileSizeDeduplicator, md5Deduplicator ]
+        return this.deduplicateWithDeduplicators([sanitizedFilenames], deduplicators, deduplicators.length, sanitizedFilenames.length)
     },
 
     /**
@@ -28,7 +30,10 @@ const DeduplicatorManager = {
      * @param {Array<Deduplicators>} deduplicators Deduplicators.
      * @returns A list of lists of duplicated files.
      */
-    deduplicateWithDeduplicators: function(listOfPotentialDuplicates, deduplicators) {
+    deduplicateWithDeduplicators: function(listOfPotentialDuplicates, deduplicators, origDeduplicatorCount, origFileCount) {
+        var processed = 0;
+        const pass = origDeduplicatorCount - deduplicators.length + 1;
+
         if (deduplicators.length == 0) {
             return listOfPotentialDuplicates
         }
@@ -36,7 +41,13 @@ const DeduplicatorManager = {
         var newList = []
         let deduplicator = deduplicators.shift()
         for (var i = 0; i < listOfPotentialDuplicates.length; i++) {
+            console.log("[ Pass " + pass + " / " + origDeduplicatorCount + " ][ " + processed + " / " + origFileCount + "]" )
             let potentialDuplicates = listOfPotentialDuplicates[i]
+            processed += potentialDuplicates.length;
+            if (potentialDuplicates.length === 1) {
+                continue;
+            }
+
             let reducedPotentialDuplicates = deduplicator.deduplicate(potentialDuplicates)
 
             // Bail if the result was undefined.
@@ -51,7 +62,7 @@ const DeduplicatorManager = {
             }
         }
 
-        return this.deduplicateWithDeduplicators(newList, deduplicators)
+        return this.deduplicateWithDeduplicators(newList, deduplicators, origDeduplicatorCount, origFileCount)
     }
 }
 
