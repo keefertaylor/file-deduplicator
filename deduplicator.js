@@ -4,14 +4,16 @@ const deduplicator = {
      * 
      * @param {Array<String>>} filenames The files to consider.
      * @param {*} evaluatorFunction A function which produces an output for the given file.
+     * 
+     * @return An array of evaluatedResult -> list of files, and a list of errored files.
      */
     deduplicate: function(filenames, evaluatorFunction) {
-        var evaluatedToFilesMap = this.evaluateInputs(filenames, evaluatorFunction);
-        if (evaluatedToFilesMap == undefined) {
+        var evaluatedResult = this.evaluateInputs(filenames, evaluatorFunction);
+        if (evaluatedResult == undefined) {
             return undefined
         }
 
-        return this.reduceToPotentiallyDuplicatedFiles(evaluatedToFilesMap);
+        return this.reduceToPotentiallyDuplicatedFiles(evaluatedResult)
     },
 
     /**
@@ -37,16 +39,24 @@ const deduplicator = {
      * 
      * @param {Array<String>} filenames 
      * @param {Function} evaluatorFunction 
+     * 
+     * @return An array of evaluatedResult -> list of files, and a list of errored files. 
      */
     evaluateInputs: function(filenames, evaluatorFunction) {
+        var errored = [];
+
         var evaluatedToFilesMap = {}
         for (var i = 0; i < filenames.length; i++) {
             let filename = filenames[i];
+            // console.log('[ ' + i + ' / ' + filenames.length + '] evaluating: ' + filename);
+
             let evaluated = evaluatorFunction(filename)
 
             // If the file couldn't be evaluated, then bail out of the entire function since something has gone terribly wrong.
             if (evaluated == undefined) {
-                return undefined;
+                // console.log("Failed to evaluate: " + filename)
+                errored.push(filename);
+                continue
             }
 
             // Add the file to the list in the map.
@@ -56,7 +66,9 @@ const deduplicator = {
                 evaluatedToFilesMap[evaluated].push(filename)
             }
         }
+
         return evaluatedToFilesMap
+        // return [ evaluatedToFilesMap, errored ] 
     }
 }
 
