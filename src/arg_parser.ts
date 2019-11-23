@@ -1,7 +1,7 @@
 const absolutePathError = "Paths must be absolute."
 const usageMessage = "Usage: `node index.js <absolute path to dir1> <absolute path to dir 2>"
 
-const argParser = {
+class ArgParser {
     /**
      * Validate the arguments and pass back an array of length 2 with the two directories.
      *
@@ -9,7 +9,7 @@ const argParser = {
      *
      * @param {Array<String>} argv The argv from the process.
      */
-    validateArgs: function(argv) {
+    public static validateArgs(argv: Array<string>): Array<String> {
         // Remove off default invocation arguments.
         argv.shift()
         argv.shift()
@@ -19,14 +19,14 @@ const argParser = {
             return undefined
         }
 
-        dir1 = argv.shift()
+        const dir1 = argv.shift()
         if (dir1.charAt(0) !== '/') {
             console.log(absolutePathError)
             console.log(usageMessage)
             return undefined
         }
 
-        dir2 = argv.shift()
+        const dir2 = argv.shift()
         if (dir2 === undefined) {
           return [ dir1 ];
         }
@@ -41,4 +41,4 @@ const argParser = {
     }
 }
 
-module.exports = argParser
+export default ArgParser;
