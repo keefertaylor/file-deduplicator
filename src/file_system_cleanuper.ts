@@ -1,12 +1,13 @@
-const fs = require('fs')
+import fs from 'fs';
+import EntityDeleter from './entity_deleter';
 
-const fileSystemCleanup = {
+class FileSystemCleanuper {
     /**
      * Cleans up duplicated files.
      * @param {Array<Array<String>>} duplicatedFileListList 
      * @param {EntityDeleter} entityDeleter An entity deleter that will perform cleanup.
      */
-    cleanupFiles: function(duplicatedFileListList, entityDeleter) {
+    public static cleanupFiles(duplicatedFileListList: Array<Array<string>>, entityDeleter: EntityDeleter): void {
         for (var i = 0; i < duplicatedFileListList.length; i++) {
             const duplicatedFilesList = duplicatedFileListList[i]
 
@@ -22,8 +23,8 @@ const fileSystemCleanup = {
     /**
      * Cleanup any empty folders inside the given directory.
      */
-    cleanupEmptyFolders: async function(dir) {
-        let folders = findAllFolders(dir)
+    public static async cleanupEmptyFolders(absoluteDirPath: string): Promise<void> {
+        let folders = FileSystemCleanuper.findAllFolders(absoluteDirPath)
         for (var i = 0; i < folders.length; i++) {
             let folder = folders[i];
             try {
@@ -34,19 +35,20 @@ const fileSystemCleanup = {
             }
         }
     }
+
+    private static findAllFolders(absoluteDirPath: string, existingFolderList?: Array<string>): Array<string> {
+        const files = fs.readdirSync(absoluteDirPath);
+        var folderList = existingFolderList || [];
+        files.forEach(function(file) {
+            const possibleFolder = absoluteDirPath + '/' + file
+            if (fs.statSync(possibleFolder).isDirectory()) {
+                folderList = FileSystemCleanuper.findAllFolders(possibleFolder, folderList);
+                folderList.push(possibleFolder)
+            }
+        });
+        return folderList;
+    };
 }
 
-var findAllFolders = function(dir, folderList) {
-    files = fs.readdirSync(dir);
-    folderList = folderList || [];
-    files.forEach(function(file) {
-        const possibleFolder = dir + '/' + file
-        if (fs.statSync(possibleFolder).isDirectory()) {
-            folderList = findAllFolders(possibleFolder, folderList);
-            folderList.push(possibleFolder)
-        }
-    });
-    return folderList;
-};
-  
-module.exports = fileSystemCleanup
+
+export default FileSystemCleanuper;
