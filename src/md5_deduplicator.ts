@@ -1,29 +1,29 @@
-const hasher = require('md5-file')
-const deduplicator = require('./deduplicator.js')
+import hasher from 'md5-file'
+import Deduplicator from './deduplicator.js'
 
-const md5Deduplicator = {
+class Md5Deduplicator extends Deduplicator {
     /**
      * Deduplicate the given files by md5 hash.
      * 
      * @param {Array<String>} filenames: A list of filenames to examine.
      * @returns {Array<Array<String>>} A list of lists of potentially deduplicated files. Returns undefined if there was an error.
      */
-    deduplicate: function(filenames) {
-        return deduplicator.deduplicate(filenames, this.md5Hash)
-    },
+    public deduplicate(filenames: Array<string>): Array<Array<string>> {
+        return super.deduplicate(filenames, this.md5Hash)
+    }
 
     /**
      * Return the md5 checksum of the given file.
      * 
      * @param {String} filename
      */
-    md5Hash: function(filename) {
+    private md5Hash(absoluteFilePath: string): string {
         try {
-            return hasher.sync(filename)
+            return hasher.sync(absoluteFilePath)
         } catch (e) {
             return undefined;
         }
     }
 };
 
-module.exports = md5Deduplicator
+export default Md5Deduplicator

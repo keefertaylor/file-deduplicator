@@ -1,31 +1,31 @@
-const fs = require('fs')
-const deduplicator = require('./deduplicator.js')
+import fs from 'fs'
+import Deduplicator from './deduplicator'
 
-const fileSizeDeduplicator = {
+class FileSizeDeduplicator extends Deduplicator {
     /**
      * Deduplicate the given files by file size.
      * 
      * @param {Array<String>} filenames: A list of filenames to examine.
      * @returns {Array<Array<String>>} A list of lists of potentially deduplicated files. Returns undefined if there was an error.
      */
-    deduplicate: function(filenames) {
-        return deduplicator.deduplicate(filenames, this.fileSizeInBytes)
-    },
+    public deduplicate(filenames: Array<string>): Array<Array<string>> {
+        return super.deduplicate(filenames, this.fileSizeInBytes)
+    }
 
     /**
      * Return the given size of the file in bytes.
      * 
      * @param {String} filename
      */
-    fileSizeInBytes: function(filename) {
+    private fileSizeInBytes(absoluteFilePath: string): string {
         try {
-            const stats = fs.statSync(filename);
+            const stats = fs.statSync(absoluteFilePath);
             const fileSizeInBytes = stats.size;
-            return fileSizeInBytes;
+            return String(fileSizeInBytes);
         } catch (e) {
             return undefined;
         }
     }
 };
 
-module.exports = fileSizeDeduplicator
+export default FileSizeDeduplicator
