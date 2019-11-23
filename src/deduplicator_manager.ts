@@ -1,23 +1,24 @@
-let md5Deduplicator = require('./md5_deduplicator.js')
-let fileSizeDeduplicator = require('./file_size_deduplicator.js')
+import Deduplicator from './deduplicator';
+import Md5Deduplicator from './md5_deduplicator';
+import FileSizeDeduplicator from './file_size_deduplicator';
 
-const DeduplicatorManager = {
+class DeduplicatorManager {
     /**
      * Deduplicate a list of files.
      * 
      * @param {Array<File>} filenames 
      */
-    deduplicate: function(filenames) {
+    public deduplicate(filenames: Array<string>): Array<Array<string>> {
         let sanitizedFilenames = this.removeDuplicateFilenames(filenames)
-        return this.deduplicateWithDeduplicators([sanitizedFilenames], [ fileSizeDeduplicator, md5Deduplicator ])
+        return this.deduplicateWithDeduplicators([sanitizedFilenames], [ new FileSizeDeduplicator(), new Md5Deduplicator() ])
     },
 
     /**
      * Remove any duplicates from the array.
      */
-    removeDuplicateFilenames: function(filenames) {
+    private removeDuplicateFilenames(filenames: Array<string>): Array<string> {
         return [...new Set(filenames)];
-    },
+    }
 
     /**
      * Apply the given deduplicators in order to the given set of files.
@@ -28,7 +29,7 @@ const DeduplicatorManager = {
      * @param {Array<Deduplicators>} deduplicators Deduplicators.
      * @returns A list of lists of duplicated files.
      */
-    deduplicateWithDeduplicators: function(listOfPotentialDuplicates, deduplicators) {
+    private deduplicateWithDeduplicators(listOfPotentialDuplicates: Array<Array<string>>, deduplicators: Array<Deduplicator>): Array<Array<string>> {
         if (deduplicators.length == 0) {
             return listOfPotentialDuplicates
         }
@@ -55,4 +56,4 @@ const DeduplicatorManager = {
     }
 }
 
-module.exports = DeduplicatorManager
+export default DeduplicatorManager

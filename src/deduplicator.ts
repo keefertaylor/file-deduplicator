@@ -5,7 +5,12 @@ class Deduplicator {
      * @param {Array<String>>} filenames The files to consider.
      * @param {*} evaluatorFunction A function which produces an output for the given file.
      */
-    public deduplicate(filenames: Array<string>, evaluatorFunction: (string) => string): Array<Array<string>> {
+    public deduplicate(filenames: Array<string>, evaluatorFunction?: (string) => string): Array<Array<string>> {
+        if (evaluatorFunction === undefined) {
+            console.log("Fatal: no evaluator function defined")
+            return undefined;
+        }
+
         var evaluatedToFilesMap = this.evaluateInputs(filenames, evaluatorFunction);
         if (evaluatedToFilesMap == undefined) {
             return undefined
