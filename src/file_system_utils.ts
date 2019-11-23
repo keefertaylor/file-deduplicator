@@ -1,19 +1,19 @@
-const nodeDir = require('node-dir');
+import nodeDir from 'node-dir';
 
 /** Simple utils for filesystem. */
-const fileSystemUtils = {
+class FileSystemUtils {
     /**
      * Recursively returns all files in a directory, or undefined.
      * 
      * Emits an error to console if something fails.
      */
-    allFilesRecursively: async function(dir) {
+    public static async allFilesRecursively(absoluteDir: string): Promise<Array<string>> {
         try {
-            return await nodeDir.promiseFiles(dir);
+            return await nodeDir.promiseFiles(absoluteDir);
         } catch (e) {
             console.log("Could not get files. Error: " + e);
         }
     }
 }
 
-module.exports = fileSystemUtils
+export default FileSystemUtils
