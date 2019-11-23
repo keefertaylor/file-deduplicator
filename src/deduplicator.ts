@@ -1,18 +1,18 @@
-const deduplicator = {
+class Deduplicator {
     /**
      * Deduplicate the given files using an evaluator function.
      * 
      * @param {Array<String>>} filenames The files to consider.
      * @param {*} evaluatorFunction A function which produces an output for the given file.
      */
-    deduplicate: function(filenames, evaluatorFunction) {
+    public deduplicate(filenames: Array<string>, evaluatorFunction: (string) => string): Array<Array<string>> {
         var evaluatedToFilesMap = this.evaluateInputs(filenames, evaluatorFunction);
         if (evaluatedToFilesMap == undefined) {
             return undefined
         }
 
         return this.reduceToPotentiallyDuplicatedFiles(evaluatedToFilesMap);
-    },
+    }
 
     /**
      * Remove any non-duplicated files from the map.
@@ -20,17 +20,17 @@ const deduplicator = {
      * @param {} filenames 
      * @param {*} evaluatorFunction 
      */
-    reduceToPotentiallyDuplicatedFiles: function(evaluatedToFilesMap) {
+    private reduceToPotentiallyDuplicatedFiles(evaluatedToFilesMap: Map<string, Array<string>>): Array<Array<string>> {
         // Iterate over the list of files.
         var potentiallyDuplicatedFiles = []
-        for (evaluated in evaluatedToFilesMap) {
+        for (const evaluated in evaluatedToFilesMap) {
             let fileList = evaluatedToFilesMap[evaluated]
             if (fileList.length != 1) {
                 potentiallyDuplicatedFiles.push(fileList)
             }
         }
         return potentiallyDuplicatedFiles
-    },
+    }
 
     /**
      * Build a map of `evaluated` -> List of files.
@@ -38,8 +38,8 @@ const deduplicator = {
      * @param {Array<String>} filenames 
      * @param {Function} evaluatorFunction 
      */
-    evaluateInputs: function(filenames, evaluatorFunction) {
-        var evaluatedToFilesMap = {}
+    private evaluateInputs(filenames: Array<String>, evaluatorFunction: (string) => string): Map<string, Array<string>> {
+        const evaluatedToFilesMap: Map<string, Array<string>> = new Map();
         for (var i = 0; i < filenames.length; i++) {
             let filename = filenames[i];
             let evaluated = evaluatorFunction(filename)
@@ -60,4 +60,4 @@ const deduplicator = {
     }
 }
 
-module.exports = deduplicator;
+export default Deduplicator;
