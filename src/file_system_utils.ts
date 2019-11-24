@@ -1,4 +1,5 @@
 import nodeDir from 'node-dir';
+import { promises } from 'dns';
 
 /** Simple utils for filesystem. */
 class FileSystemUtils {
@@ -12,7 +13,8 @@ class FileSystemUtils {
             return await nodeDir.promiseFiles(absoluteDir);
         } catch (e) {
             console.log("Could not get files. Error: " + e);
-        }
+            return Promise.reject("failed");
+        }    
     }
 }
 

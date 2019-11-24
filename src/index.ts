@@ -22,12 +22,16 @@ const run = async function(dir1: string, dir2: string): Promise<void> {
     console.log("- " + dir1)
     console.log("- " + dir2)
 
-    const dir1FileList = await FileSystemUtils.allFilesRecursively(args[0])
-    const dir2FileList = await FileSystemUtils.allFilesRecursively(args[1])
+    const dir1FileList = await FileSystemUtils.allFilesRecursively(dir1)
+    const dir2FileList = await FileSystemUtils.allFilesRecursively(dir2)
     const filesToConsider = dir1FileList.concat(dir2FileList)
 
     let deduplicatorManager = new DeduplicationManager();
     let duplicates = deduplicatorManager.deduplicate(filesToConsider)
+    if (duplicates == undefined) {
+        console.log('failed: no duplicates');
+        return;
+    }
     console.log("Here are the duplicated files")
     for (var i = 0; i < duplicates.length; i++) {
         console.log(duplicates[i])
@@ -62,7 +66,13 @@ const prompt = function() {
 
 const args = ArgParser.validateArgs(process.argv)
 if (args == undefined) {
+    process.abort();
+}
+
+const arg0 = args![0];
+const arg1 = args![1];
+if (arg0 == undefined || arg1 == undefined) {
     process.abort()
 }
 
-run(args[0], args[1])
+run(arg0, arg1)

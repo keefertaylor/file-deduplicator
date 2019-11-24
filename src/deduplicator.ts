@@ -5,7 +5,7 @@ class Deduplicator {
      * @param {Array<String>>} filenames The files to consider.
      * @param {*} evaluatorFunction A function which produces an output for the given file.
      */
-    public deduplicate(filenames: Array<string>, evaluatorFunction?: (string) => string): Array<Array<string>> {
+    public deduplicate(filenames: Array<string>, evaluatorFunction?: (absoluteFilePath: string) => string | undefined): Array<Array<string>> | undefined {
         if (evaluatorFunction === undefined) {
             console.log("Fatal: no evaluator function defined")
             return undefined;
@@ -27,13 +27,13 @@ class Deduplicator {
      */
     private reduceToPotentiallyDuplicatedFiles(evaluatedToFilesMap: Map<string, Array<string>>): Array<Array<string>> {
         // Iterate over the list of files.
-        var potentiallyDuplicatedFiles = []
-        for (const evaluated in evaluatedToFilesMap) {
-            let fileList = evaluatedToFilesMap[evaluated]
+        var potentiallyDuplicatedFiles: Array<Array<string>> = []
+        evaluatedToFilesMap.forEach((fileList, key, map) => {
             if (fileList.length != 1) {
                 potentiallyDuplicatedFiles.push(fileList)
-            }
-        }
+            }  
+        })
+
         return potentiallyDuplicatedFiles
     }
 
@@ -43,7 +43,7 @@ class Deduplicator {
      * @param {Array<String>} filenames 
      * @param {Function} evaluatorFunction 
      */
-    private evaluateInputs(filenames: Array<String>, evaluatorFunction: (string) => string): Map<string, Array<string>> {
+    private evaluateInputs(filenames: Array<string>, evaluatorFunction: (absoluteFilePath: string) =>  string | undefined): Map<string, Array<string>> | undefined {
         const evaluatedToFilesMap: Map<string, Array<string>> = new Map();
         for (var i = 0; i < filenames.length; i++) {
             let filename = filenames[i];
@@ -55,10 +55,12 @@ class Deduplicator {
             }
 
             // Add the file to the list in the map.
-            if (evaluatedToFilesMap[evaluated] == undefined) {
-                evaluatedToFilesMap[evaluated] = [filename]
+            const list =  evaluatedToFilesMap.get(evaluated);
+            if (list == undefined) {
+                evaluatedToFilesMap.set(evaluated, [filename]);
             } else {
-                evaluatedToFilesMap[evaluated].push(filename)
+                list.push(filename);
+                evaluatedToFilesMap.set(evaluated, list);
             }
         }
         return evaluatedToFilesMap

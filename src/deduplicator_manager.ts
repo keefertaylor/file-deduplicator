@@ -8,10 +8,10 @@ class DeduplicatorManager {
      * 
      * @param {Array<File>} filenames 
      */
-    public deduplicate(filenames: Array<string>): Array<Array<string>> {
+    public deduplicate(filenames: Array<string>): Array<Array<string>> | undefined {
         let sanitizedFilenames = this.removeDuplicateFilenames(filenames)
         return this.deduplicateWithDeduplicators([sanitizedFilenames], [ new FileSizeDeduplicator(), new Md5Deduplicator() ])
-    },
+    }
 
     /**
      * Remove any duplicates from the array.
@@ -29,13 +29,16 @@ class DeduplicatorManager {
      * @param {Array<Deduplicators>} deduplicators Deduplicators.
      * @returns A list of lists of duplicated files.
      */
-    private deduplicateWithDeduplicators(listOfPotentialDuplicates: Array<Array<string>>, deduplicators: Array<Deduplicator>): Array<Array<string>> {
+    private deduplicateWithDeduplicators(listOfPotentialDuplicates: Array<Array<string>>, deduplicators: Array<Deduplicator>): Array<Array<string>> | undefined {
         if (deduplicators.length == 0) {
             return listOfPotentialDuplicates
         }
 
         var newList = []
         let deduplicator = deduplicators.shift()
+        if (deduplicator == undefined) {
+            return undefined;
+        }
         for (var i = 0; i < listOfPotentialDuplicates.length; i++) {
             let potentialDuplicates = listOfPotentialDuplicates[i]
             let reducedPotentialDuplicates = deduplicator.deduplicate(potentialDuplicates)

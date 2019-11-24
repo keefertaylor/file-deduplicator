@@ -8,7 +8,7 @@ class Md5Deduplicator extends Deduplicator {
      * @param {Array<String>} filenames: A list of filenames to examine.
      * @returns {Array<Array<String>>} A list of lists of potentially deduplicated files. Returns undefined if there was an error.
      */
-    public deduplicate(filenames: Array<string>): Array<Array<string>> {
+    public deduplicate(filenames: Array<string>): Array<Array<string>> | undefined  {
         return super.deduplicate(filenames, this.md5Hash)
     }
 
@@ -19,7 +19,7 @@ class Md5Deduplicator extends Deduplicator {
      * 
      * @param {String} filename
      */
-    public md5Hash(absoluteFilePath: string): string {
+    public md5Hash(absoluteFilePath: string): string | undefined {
         try {
             return hasher.sync(absoluteFilePath)
         } catch (e) {

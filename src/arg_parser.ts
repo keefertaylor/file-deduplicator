@@ -9,7 +9,7 @@ class ArgParser {
      *
      * @param {Array<String>} argv The argv from the process.
      */
-    public static validateArgs(argv: Array<string>): Array<string> {
+    public static validateArgs(argv: Array<string>): Array<string> | undefined {
         // Remove off default invocation arguments.
         argv.shift()
         argv.shift()
@@ -20,7 +20,7 @@ class ArgParser {
         }
 
         const dir1 = argv.shift()
-        if (dir1.charAt(0) !== '/') {
+        if (dir1 == undefined || dir1.charAt(0) !== '/') {
             console.log(absolutePathError)
             console.log(usageMessage)
             return undefined

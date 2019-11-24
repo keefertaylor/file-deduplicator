@@ -18,7 +18,7 @@ class FileSystemCleanuper {
                 entityDeleter.deleteFile(duplicatedFile)
             }
         }
-    },
+    }
 
     /**
      * Cleanup any empty folders inside the given directory.
