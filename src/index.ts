@@ -1,12 +1,14 @@
-const argParser = require('./arg_parser.js')
-const fileSystemUtils = require('./file_system_utils')
-const deduplicationManager = require('./deduplicator_manager.js')
-const readline = require('readline').createInterface({
+import ArgParser from'./arg_parser'
+import FileSystemUtils from './file_system_utils'
+import DeduplicationManager from './deduplicator_manager'
+import readlineLib from 'readline'
+import FileSystemCleanuper from './file_system_cleanuper'
+import EntityDeleter from './entity_deleter'
+
+const readline = readlineLib.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-const fileSystemCleanuper = require('./file_system_cleanuper.js')
-const entityDeleter = require('./entity_deleter.js')
 
 /**
  * Finds and prints duplicates files from across the two provided dirs.
@@ -15,16 +17,17 @@ const entityDeleter = require('./entity_deleter.js')
  * @param {String} dir1 
  * @param {String} dir2 
  */
-const run = async function(dir1, dir2) {
+const run = async function(dir1: string, dir2: string): Promise<void> {
     console.log("Deduping across: ")
     console.log("- " + dir1)
     console.log("- " + dir2)
 
-    const dir1FileList = await fileSystemUtils.allFilesRecursively(args[0])
-    const dir2FileList = await fileSystemUtils.allFilesRecursively(args[1])
+    const dir1FileList = await FileSystemUtils.allFilesRecursively(args[0])
+    const dir2FileList = await FileSystemUtils.allFilesRecursively(args[1])
     const filesToConsider = dir1FileList.concat(dir2FileList)
 
-    let duplicates = deduplicationManager.deduplicate(filesToConsider)
+    let deduplicatorManager = new DeduplicationManager();
+    let duplicates = deduplicatorManager.deduplicate(filesToConsider)
     console.log("Here are the duplicated files")
     for (var i = 0; i < duplicates.length; i++) {
         console.log(duplicates[i])
@@ -36,9 +39,9 @@ const run = async function(dir1, dir2) {
         process.abort()
     }
     console.log("Cleaning up")
-    fileSystemCleanuper.cleanupFiles(duplicates, entityDeleter);
-    fileSystemCleanuper.cleanupEmptyFolders(dir1)
-    fileSystemCleanuper.cleanupEmptyFolders(dir2)
+    FileSystemCleanuper.cleanupFiles(duplicates, new EntityDeleter());
+    FileSystemCleanuper.cleanupEmptyFolders(dir1)
+    FileSystemCleanuper.cleanupEmptyFolders(dir2)
 }
 
 
@@ -57,9 +60,9 @@ const prompt = function() {
 
 }
 
-const args = argParser.validateArgs(process.argv)
+const args = ArgParser.validateArgs(process.argv)
 if (args == undefined) {
     process.abort()
 }
 
-duplicatedFiles = run(args[0], args[1])
+run(args[0], args[1])

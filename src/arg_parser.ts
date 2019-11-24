@@ -9,7 +9,7 @@ class ArgParser {
      *
      * @param {Array<String>} argv The argv from the process.
      */
-    public static validateArgs(argv: Array<string>): Array<String> {
+    public static validateArgs(argv: Array<string>): Array<string> {
         // Remove off default invocation arguments.
         argv.shift()
         argv.shift()
