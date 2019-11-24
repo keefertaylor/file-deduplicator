@@ -1,5 +1,6 @@
 import fs from 'fs';
 import EntityDeleter from './entity_deleter';
+import FileSystemUtils from './file_system_utils';
 
 class FileSystemCleanuper {
     /**
@@ -28,8 +29,8 @@ class FileSystemCleanuper {
         for (var i = 0; i < folders.length; i++) {
             let folder = folders[i];
             try {
+                await entityDeleter.deleteFolder(folder);
                 console.log("Removed now empty folder: " + folder)
-                entityDeleter.deleteFolder(absoluteDirPath);
             } catch (e) {
                 // Folder was still full, intentionally do not process error.
             }
@@ -40,7 +41,13 @@ class FileSystemCleanuper {
         const files = fs.readdirSync(absoluteDirPath);
         var folderList = existingFolderList || [];
         files.forEach(function(file) {
+            console.log('examining ' + file);
             const possibleFolder = absoluteDirPath + '/' + file
+            if (FileSystemUtils.isSymbolicLink(possibleFolder)) {
+                console.log('skipping');
+                return;
+            }
+
             if (fs.statSync(possibleFolder).isDirectory()) {
                 folderList = FileSystemCleanuper.findAllFolders(possibleFolder, folderList);
                 folderList.push(possibleFolder)

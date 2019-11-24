@@ -7,7 +7,7 @@ class EntityDeleter {
         fs.unlinkSync(absoluteFilePath)
     }
 
-    public deleteFolder(absoluteFolderPath: string): void {
+    public async deleteFolder(absoluteFolderPath: string): Promise<void> {
         console.log('removing dir: ' + absoluteFolderPath)
         fs.rmdirSync(absoluteFolderPath)
     }

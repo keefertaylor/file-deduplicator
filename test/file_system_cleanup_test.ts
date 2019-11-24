@@ -1,6 +1,8 @@
 import assert from 'assert';
 import FileSystemCleanuper from '../src/file_system_cleanuper'
 import EntityDeleter from '../src/entity_deleter';
+import testData from "./test_data";
+import FileSystemUtils from '../src/file_system_utils';
 
 class FakeEntityDeleter extends EntityDeleter {
     public deletedFiles: Array<string> = [];
@@ -10,8 +12,11 @@ class FakeEntityDeleter extends EntityDeleter {
         this.deletedFiles.push(file)
     }
 
-    deleteFolder(absoluteFolderPath: string): void {
-        this.deletedFolders.push(absoluteFolderPath);
+    async deleteFolder(absoluteFolderPath: string): Promise<void> {
+        const isEmpty = await FileSystemUtils.directoryIsEmpty(absoluteFolderPath)
+        if (isEmpty) {
+            this.deletedFolders.push(absoluteFolderPath);
+        }
     }
 }
 
@@ -70,5 +75,18 @@ describe('#delete file', function() {
 
         // Assert that nothing was cleaned up.
         assert.equal(fakeEntityDeleter.deletedFiles.length, 0)
+    });
+});
+
+describe('#cleanup empty folders', function() {
+    it('should cleanup empty folders', async function() {
+        const fakeEntityDeleter = new FakeEntityDeleter();
+        await FileSystemCleanuper.cleanupEmptyFolders(testData.testDataDir, fakeEntityDeleter);
+
+        assert.equal(fakeEntityDeleter.deletedFolders.length, testData.emptyDirs.length);
+        for (var i = 0; i< testData.emptyDirs.length; i++) {
+            let expected = testData.emptyDirs[i]
+            assert(fakeEntityDeleter.deletedFolders.includes(expected));
+        }
     });
 });
