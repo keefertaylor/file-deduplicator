@@ -1,4 +1,4 @@
-let testDataDir = process.cwd() + '/test_data/'
+const testDataDir = process.cwd() + '/test_data/'
 
 const testData = {
     testDataDir: testDataDir,
@@ -21,4 +21,4 @@ const testData = {
     invalidFile: testDataDir + 'DOES_NOT_EXIST.txt'
 }
 
-module.exports = testData;
+export default testData;
