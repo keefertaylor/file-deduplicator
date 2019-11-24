@@ -24,10 +24,6 @@ describe('#deduplicateByHash', function() {
 
         // WHEN the files are deduplicated.
         let potentialDuplicates = md5Deduplicator.deduplicate(filenames)
-        if (potentialDuplicates == undefined) {
-            assert(false);
-            return;
-        }
 
         // THEN the result is undefined.
         assert.equal(potentialDuplicates, undefined)
