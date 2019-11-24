@@ -1,6 +1,8 @@
-const assert = require('assert');
-const entityDeleter = require('../entity_deleter.js')
-const fs = require('fs')
+import assert from 'assert';
+import EntityDeleter from '../src/entity_deleter'
+import fs from 'fs'
+
+const entityDeleter = new EntityDeleter()
 
 describe('#delete file', function() {
     it('should delete a file', async function() {
