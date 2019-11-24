@@ -13,6 +13,10 @@ describe('#deduplicate', function() {
         
         // WHEN the files are deduplicated.
         let duplicates = deduplicatorManager.deduplicate(filenames)
+        if (duplicates == undefined) {
+            assert(false);
+            return;
+        }
         
         // THEN the set of overlapping files are identified.
         assert.equal(duplicates.length, 1)
@@ -37,11 +41,15 @@ describe('#deduplicate', function() {
 
     it('should return an empty list with empty files', function() {
         // GIVEN an empty list.
-        let filenames = []
+        let filenames: Array<string> = []
 
         // WHEN the files are deduplicated.
         let duplicates = deduplicatorManager.deduplicate(filenames)
-
+        if (duplicates == undefined) {
+            assert(false);
+            return;
+        }
+        
         // THEN the result is empty.
         assert.equal(duplicates.length, 0)
     })
@@ -54,7 +62,11 @@ describe('#deduplicate', function() {
 
         // WHEN the files are deduplicated.
         let duplicates = deduplicatorManager.deduplicate(filenames)
-
+        if (duplicates == undefined) {
+            assert(false);
+            return;
+        }
+        
         // THEN the result is empty.
         assert.equal(duplicates.length, 0)        
     })
@@ -65,7 +77,11 @@ describe('#deduplicate', function() {
         
         // WHEN the files are deduplicated.
         let duplicates = deduplicatorManager.deduplicate(filenames)
-
+        if (duplicates == undefined) {
+            assert(false);
+            return;
+        }
+        
         // THEN the result is empty.
         assert.equal(duplicates.length, 0)
     })
@@ -81,6 +97,10 @@ describe('#deduplicate', function() {
 
         // WHEN the files are deduplicated.
         let duplicates = deduplicatorManager.deduplicate(filenames)
+        if (duplicates == undefined) {
+            assert(false);
+            return;
+        }
         
         // THEN the set of overlapping files are identified.
         assert.equal(duplicates.length, 1)

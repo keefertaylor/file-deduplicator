@@ -1,5 +1,5 @@
 import hasher from 'md5-file'
-import Deduplicator from './deduplicator.js'
+import Deduplicator from './deduplicator'
 
 class Md5Deduplicator extends Deduplicator {
     /**

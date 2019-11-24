@@ -1,5 +1,5 @@
 import assert from 'assert';
-import ArgParser from '../src/arg_parser.js'
+import ArgParser from '../src/arg_parser'
 
 const defaultArgv = [
     '/usr/local/Cellar/node/12.3.1/bin/node',
@@ -20,9 +20,9 @@ describe('#parse args', function() {
 
         const dirs = ArgParser.validateArgs(argv)
 
-        assert.equal(dirs.length, 2)
-        assert.equal(dirs[0], dir1)
-        assert.equal(dirs[1], dir2)
+        assert.equal(dirs!.length, 2)
+        assert.equal(dirs![0], dir1)
+        assert.equal(dirs![1], dir2)
     });
 
     it('should fail with too few args', async function() {
@@ -80,8 +80,8 @@ describe('#parse args', function() {
 
       const dirs = ArgParser.validateArgs(argv)
 
-      assert.equal(dirs.length, 1)
-      assert.equal(dirs[0], dir1)
+      assert.equal(dirs!.length, 1)
+      assert.equal(dirs![0], dir1)
     });
 
     it('should be fine with one relative directory', async function() {

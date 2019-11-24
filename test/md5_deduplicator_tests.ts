@@ -1,6 +1,6 @@
 import assert from 'assert';
 import testData from './test_data'
-import Md5Deduplicator from '../src/md5_deduplicator.js';
+import Md5Deduplicator from '../src/md5_deduplicator';
 
 const md5Deduplicator = new Md5Deduplicator();
 
@@ -24,6 +24,10 @@ describe('#deduplicateByHash', function() {
 
         // WHEN the files are deduplicated.
         let potentialDuplicates = md5Deduplicator.deduplicate(filenames)
+        if (potentialDuplicates == undefined) {
+            assert(false);
+            return;
+        }
 
         // THEN the result is undefined.
         assert.equal(potentialDuplicates, undefined)
@@ -35,6 +39,10 @@ describe('#deduplicateByHash', function() {
 
         // WHEN the files are deduplicated.
         let potentialDuplicates = md5Deduplicator.deduplicate(filenames);
+        if (potentialDuplicates == undefined) {
+            assert(false);
+            return;
+        }
 
         // THEN the result is the empty list.
         assert.equal(potentialDuplicates.length, 0);
@@ -47,6 +55,10 @@ describe('#deduplicateByHash', function() {
 
         // WHEN the files are deduplicated.
         let potentialDuplicates = md5Deduplicator.deduplicate(filenames)
+        if (potentialDuplicates == undefined) {
+            assert(false);
+            return;
+        }
 
         // THEN the result is a single list with the duplicated files.
         assert.equal(potentialDuplicates.length, 1)
@@ -63,6 +75,10 @@ describe('#deduplicateByHash', function() {
 
         // WHEN the files are deduplicated.
         let potentialDuplicates = md5Deduplicator.deduplicate(filenames)
+        if (potentialDuplicates == undefined) {
+            assert(false);
+            return;
+        }
 
         // THEN the sets of overlapping files are identified.
         assert.equal(potentialDuplicates.length, 1)

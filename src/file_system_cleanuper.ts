@@ -23,13 +23,13 @@ class FileSystemCleanuper {
     /**
      * Cleanup any empty folders inside the given directory.
      */
-    public static async cleanupEmptyFolders(absoluteDirPath: string): Promise<void> {
+    public static async cleanupEmptyFolders(absoluteDirPath: string, entityDeleter: EntityDeleter): Promise<void> {
         let folders = FileSystemCleanuper.findAllFolders(absoluteDirPath)
         for (var i = 0; i < folders.length; i++) {
             let folder = folders[i];
             try {
-                fs.rmdirSync(folder)
                 console.log("Removed now empty folder: " + folder)
+                entityDeleter.deleteFolder(absoluteDirPath);
             } catch (e) {
                 // Folder was still full, intentionally do not process error.
             }

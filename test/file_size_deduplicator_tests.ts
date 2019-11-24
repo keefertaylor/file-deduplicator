@@ -1,6 +1,6 @@
 import assert from 'assert';
 import testData from './test_data'
-import FileSizeDeduplicator from '../src/file_size_deduplicator.js'
+import FileSizeDeduplicator from '../src/file_size_deduplicator'
 
 const fileSizeDeduplicator = new FileSizeDeduplicator();
 
@@ -35,7 +35,11 @@ describe('#deduplicateByFileSize', function() {
 
         // WHEN the files are deduplicated.
         let potentialDuplicates = fileSizeDeduplicator.deduplicate(filenames);
-
+        if (potentialDuplicates == undefined) {
+            assert(false);
+            return;
+        }
+        
         // THEN the result is the empty list.
         assert.equal(potentialDuplicates.length, 0);
     });
@@ -47,6 +51,10 @@ describe('#deduplicateByFileSize', function() {
 
         // WHEN the files are deduplicated.
         let potentialDuplicates = fileSizeDeduplicator.deduplicate(filenames)
+        if (potentialDuplicates == undefined) {
+            assert(false);
+            return;
+        }
 
         // THEN the result is a single list with the duplicated files.
         assert.equal(potentialDuplicates.length, 1)
@@ -63,7 +71,11 @@ describe('#deduplicateByFileSize', function() {
 
         // WHEN the files are deduplicated.
         let potentialDuplicates = fileSizeDeduplicator.deduplicate(filenames)
-
+        if (potentialDuplicates == undefined) {
+            assert(false);
+            return;
+        }
+        
         // THEN the sets of overlapping files are identified.
         assert.equal(potentialDuplicates.length, 2)
         assert.equal(potentialDuplicates[0].length, 3)
