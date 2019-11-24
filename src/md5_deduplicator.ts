@@ -15,9 +15,11 @@ class Md5Deduplicator extends Deduplicator {
     /**
      * Return the md5 checksum of the given file.
      * 
+     * This method exposed for testing.
+     * 
      * @param {String} filename
      */
-    private md5Hash(absoluteFilePath: string): string {
+    public md5Hash(absoluteFilePath: string): string {
         try {
             return hasher.sync(absoluteFilePath)
         } catch (e) {

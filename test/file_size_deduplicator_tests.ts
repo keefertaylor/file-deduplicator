@@ -1,6 +1,8 @@
-var assert = require('assert');
-var testData = require('./test_data.js')
-var fileSizeDeduplicator = require('../file_size_deduplicator.js')
+import assert from 'assert';
+import testData from './test_data'
+import FileSizeDeduplicator from '../src/file_size_deduplicator.js'
+
+const fileSizeDeduplicator = new FileSizeDeduplicator();
 
 describe('#fileSizeInBytes', function() {
     it('should return the file size in bytes for a file', function() {

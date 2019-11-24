@@ -1,10 +1,13 @@
-const assert = require('assert');
-const fileSystemCleanuper = require('../file_system_cleanuper')
+import assert from 'assert';
+import FileSystemCleanuper from '../src/file_system_cleanuper'
+import EntityDeleter from '../src/entity_deleter';
 
 var deletedFiles = []
 
-const mockCleanuper = {
-    deleteFile: function(file) {
+class MockCleanuper extends EntityDeleter {
+    public deletedFiles: Array<string> = [];
+
+    deleteFile(file: string): void {
         deletedFiles.push(file)
     }
 }
@@ -23,7 +26,8 @@ describe('#delete file', function() {
         ]
 
         // Cleanup files.
-        fileSystemCleanuper.cleanupFiles(duplicatedFileList, mockCleanuper)
+        const mockCleanuper = new MockCleanuper();
+        FileSystemCleanuper.cleanupFiles(duplicatedFileList, mockCleanuper)
 
         // Assert files that were duplicated were cleaned up
         assert(deletedFiles.includes("b"))
@@ -52,7 +56,7 @@ describe('#delete file', function() {
         ]
 
         // Cleanup files.
-        fileSystemCleanuper.cleanupFiles(duplicatedFileList, mockCleanuper)
+        FileSystemCleanuper.cleanupFiles(duplicatedFileList, mockCleanuper)
 
         // Assert that nothing was cleaned up.
         assert.equal(deletedFiles.length, 0)
@@ -66,7 +70,8 @@ describe('#delete file', function() {
         const duplicatedFileList = []
 
         // Cleanup files.
-        fileSystemCleanuper.cleanupFiles(duplicatedFileList, mockCleanuper)
+        const mockCleanuper = new MockCleanuper();
+        FileSystemCleanuper.cleanupFiles(duplicatedFileList, mockCleanuper)
 
         // Assert that nothing was cleaned up.
         assert.equal(deletedFiles.length, 0)
@@ -75,6 +80,6 @@ describe('#delete file', function() {
 
 describe('#delete folder', function() {
     it('should cleanup files as expectedly with multiple lists', async function() {
-        fileSystemCleanuper.cleanupEmptyFolders("/Users/keefertaylor/file_cleanup_test/test2/", mockCleanuper)
+        FileSystemCleanuper.cleanupEmptyFolders("/Users/keefertaylor/file_cleanup_test/test2/", mockCleanuper)
     });
 });

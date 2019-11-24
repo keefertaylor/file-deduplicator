@@ -1,6 +1,8 @@
-var assert = require('assert');
-var testData = require('./test_data.js')
-var deduplicatorManager = require('../deduplicator_manager.js')
+import assert from 'assert';
+import testData from './test_data'
+import DeduplicatorManager from '../src/deduplicator_manager'
+
+const deduplicatorManager = new DeduplicatorManager();
 
 describe('#deduplicate', function() {
     it('should dedupe successfully', function() {

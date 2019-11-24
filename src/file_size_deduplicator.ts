@@ -15,9 +15,11 @@ class FileSizeDeduplicator extends Deduplicator {
     /**
      * Return the given size of the file in bytes.
      * 
+     * This method is exposed for testing.
+     * 
      * @param {String} filename
      */
-    private fileSizeInBytes(absoluteFilePath: string): string {
+    public fileSizeInBytes(absoluteFilePath: string): string {
         try {
             const stats = fs.statSync(absoluteFilePath);
             const fileSizeInBytes = stats.size;
