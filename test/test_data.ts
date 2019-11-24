@@ -18,7 +18,9 @@ const testData = {
         testDataDir + "test_file_with_same_size_different_content_3.txt"
     ],
 
-    invalidFile: testDataDir + 'DOES_NOT_EXIST.txt'
+    invalidFile: testDataDir + 'DOES_NOT_EXIST.txt',
+
+    symlinkedFile: testDataDir + "sym_link_to_test_file.txt"
 }
 
 export default testData;

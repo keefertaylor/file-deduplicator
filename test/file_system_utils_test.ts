@@ -8,4 +8,9 @@ describe('#allFilesRecursively', function() {
         let files = await FileSystemUtils.allFilesRecursively(testData.testDataDir)
         assert.equal(files.length, 7)
     });
+
+    it('should ignore symlinked files', async function() {
+        let files = await FileSystemUtils.allFilesRecursively(testData.testDataDir);
+        assert(!files.includes(testData.symlinkedFile));
+    })
 });

@@ -1,5 +1,5 @@
 import nodeDir from 'node-dir';
-import { promises } from 'dns';
+import fs from 'fs'
 
 /** Simple utils for filesystem. */
 class FileSystemUtils {
@@ -10,7 +10,11 @@ class FileSystemUtils {
      */
     public static async allFilesRecursively(absoluteDir: string): Promise<Array<string>> {
         try {
-            return await nodeDir.promiseFiles(absoluteDir);
+            const files = await nodeDir.promiseFiles(absoluteDir);
+            return files.filter((path: string, index: number, array: Array<string>) => {
+                const stat = fs.lstatSync(path);
+                return !stat.isSymbolicLink();
+            });
         } catch (e) {
             console.log("Could not get files. Error: " + e);
             return Promise.reject("failed");

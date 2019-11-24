@@ -72,11 +72,3 @@ describe('#delete file', function() {
         assert.equal(fakeEntityDeleter.deletedFiles.length, 0)
     });
 });
-
-describe('#delete folder', function() {
-    it('should cleanup files as expectedly with multiple lists', async function() {
-        const fakeEntityDeleter = new FakeEntityDeleter();
-        FileSystemCleanuper.cleanupEmptyFolders("/Users/keefertaylor/file_cleanup_test/test2/", fakeEntityDeleter)
-        assert(false);
-    });
-});
