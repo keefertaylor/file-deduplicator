@@ -43,9 +43,10 @@ const run = async function(dir1: string, dir2: string): Promise<void> {
         process.abort()
     }
     console.log("Cleaning up")
-    FileSystemCleanuper.cleanupFiles(duplicates, new EntityDeleter());
-    FileSystemCleanuper.cleanupEmptyFolders(dir1)
-    FileSystemCleanuper.cleanupEmptyFolders(dir2)
+    const entityDeleter = new EntityDeleter();
+    FileSystemCleanuper.cleanupFiles(duplicates, entityDeleter);
+    FileSystemCleanuper.cleanupEmptyFolders(dir1, entityDeleter)
+    FileSystemCleanuper.cleanupEmptyFolders(dir2, entityDeleter)
 }
 
 
