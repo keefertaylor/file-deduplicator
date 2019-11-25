@@ -49,8 +49,6 @@ class DeduplicatorManager {
                 console.log("[Pass " + (i + 1) + " / " + deduplicators.length + "][" + (listOfPotentialDuplicates.length) + " Remaining Clusters]");
 
                 const potentialDuplicates = listOfPotentialDuplicates.shift();
-                console.log(potentialDuplicates);
-                console.log(listOfPotentialDuplicates.length)
                 if (potentialDuplicates == undefined) {
                     return undefined;
                 }
